@@ -20,6 +20,10 @@ Server.use(express.urlencoded({ extended: true, limit: '10mb' }));
 Server.use("/auth", authRoutes);
 Server.use("/jobs", jobRoutes);
 Server.use("/clients", clientRoutes);
+Server.get("/", (req, res) => {
+  res.send("Digitos Backend is running ");
+});
+
 Server.listen(process.env.PORT||5000, () => {
   console.log("server started Port " + (process.env.PORT));
 });
