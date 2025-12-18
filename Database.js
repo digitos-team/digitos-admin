@@ -10,9 +10,14 @@ if (!MONGO_URI) {
   process.exit(1);
 }
 
-mongoose
-  .connect(MONGO_URI) // No extra options!
-  .then(() => console.log("✔ MongoDB Connected"))
-  .catch((err) => console.log("MongoDB Connection Error:", err.message));
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(MONGO_URI);
+    console.log(`✔ MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+    process.exit(1);
+  }
+};
 
-export default mongoose;
+export default connectDB;

@@ -1,7 +1,8 @@
 // code in server.js file (S capital)
 import express from "express";
+import mongoose from "mongoose";
 import cors from "cors";
-import Database from "./Database.js";
+import connectDB from "./Database.js";
 import authRoutes from "./src/routes/authRoutes.js";
 import jobRoutes from "./src/routes/jobRoutes.js";
 import clientRoutes from "./src/routes/clientRoutes.js";
@@ -9,6 +10,14 @@ import clientRoutes from "./src/routes/clientRoutes.js";
 let Server = express();
 
 // Middlewares
+Server.use((req, res, next) => {
+  if (mongoose.connection.readyState === 1) {
+    next();
+  } else {
+    res.status(503).json({ message: "Service Unavailable: Database starting up..." });
+  }
+});
+
 Server.use(cors());
 // Server.use(express.json()); // parse application/json
 // Server.use(express.urlencoded({ extended: true })); // parse application/x-www-form-urlencoded
@@ -24,6 +33,11 @@ Server.get("/", (req, res) => {
   res.send("Digitos Backend is running ");
 });
 
-Server.listen(process.env.PORT||5000, () => {
-  console.log("server started Port " + (process.env.PORT));
-});
+const startServer = () => {
+  connectDB(); // Non-blocking connection start
+  Server.listen(process.env.PORT || 5000, () => {
+    console.log("server started Port " + (process.env.PORT || 5000));
+  });
+};
+
+startServer();

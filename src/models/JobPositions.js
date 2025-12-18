@@ -15,4 +15,8 @@ const jobPositionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Add indexes for performance
+jobPositionSchema.index({ createdAt: -1 });
+jobPositionSchema.index({ adminId: 1 });
+
 export default mongoose.model("JobPosition", jobPositionSchema);

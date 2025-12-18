@@ -10,12 +10,15 @@ const jobApplicationSchema = new mongoose.Schema(
       ref: "JobPosition",
       required: true,
     },
- resume: {  // ← New resume field
-    type: String,  // Stores file path/URL
-    required: true
-  }
+    resume: {  // ← New resume field
+      type: String,  // Stores file path/URL
+      required: true
+    }
   },
   { timestamps: true }
 );
+
+// Add index for performance
+jobApplicationSchema.index({ createdAt: -1 });
 
 export default mongoose.model("JobApplication", jobApplicationSchema);

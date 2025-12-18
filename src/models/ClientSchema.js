@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 const clientSchema = new mongoose.Schema(
   {
     name: { type: String, required: [true, "Name is required"] },
-    email: { 
-      type: String, 
+    email: {
+      type: String,
       required: [true, "Email is required"],
       match: [/^\S+@\S+\.\S+$/, "Please use a valid email"]
     },
@@ -14,5 +14,8 @@ const clientSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// Add index for performance
+clientSchema.index({ createdAt: -1 });
 
 export default mongoose.model("Client", clientSchema);
